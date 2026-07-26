@@ -1,21 +1,35 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
-import pool from '../lib/db';
+import { supabase } from '../lib/supabaseClient';
 
-export async function getServerSideProps() {
-  const { rows } = await pool.query(`
-    select lessons.*, rabbis.name as rabbi_name
-    from lessons
-    join rabbis on rabbis.id = lessons.rabbi_id
-    order by lessons.created_at desc
-    limit 20
-  `);
-  return { props: { lessons: JSON.parse(JSON.stringify(rows)) } };
-}
+export default function Home() {
+  const [lessons, setLessons] = useState([]);
+  const [user, setUser] = useState(null);
+  const [isSubscriber, setIsSubscriber] = useState(false);
 
-export default function Home({ lessons }) {
-  const { data: session } = useSession();
-  const isSubscriber = session?.user?.subscription_status === 'active';
+  useEffect(() => {
+    const load = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('subscription_status')
+          .eq('id', session.user.id)
+          .single();
+        setIsSubscriber(profile?.subscription_status === 'active');
+      }
+
+      const { data } = await supabase
+        .from('lessons')
+        .select('*, rabbis(name)')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      setLessons(data || []);
+    };
+    load();
+  }, []);
 
   return (
     <div>
@@ -25,29 +39,18 @@ export default function Home({ lessons }) {
           <Link href="/premium">פרימיום</Link>
         </div>
         <div>
-          {session ? (
-            <>
-              <span style={{ marginLeft: 12 }}>שלום, {session.user.email}</span>
-              <button onClick={() => signOut()}>התנתק</button>
-            </>
-          ) : (
-            <Link href="/login" className="btn">התחברות</Link>
-          )}
+          {user ? <span>שלום, {user.email}</span> : <Link href="/login" className="btn">התחברות</Link>}
         </div>
       </nav>
 
       <div className="container">
         <h1>תורה AI - שיעורים ותוכן תורני</h1>
-
         {lessons.map((lesson) => {
           const locked = lesson.is_premium && !isSubscriber;
           return (
             <div className="card" key={lesson.id}>
-              <h3>
-                {lesson.title}{' '}
-                {lesson.is_premium && <span className="badge-premium">פרימיום</span>}
-              </h3>
-              <p style={{ color: '#666' }}>מאת: {lesson.rabbi_name}</p>
+              <h3>{lesson.title} {lesson.is_premium && <span className="badge-premium">פרימיום</span>}</h3>
+              <p style={{ color: '#666' }}>מאת: {lesson.rabbis?.name}</p>
               {locked ? (
                 <p>🔒 תוכן זה זמין למנויים בלבד. <Link href="/premium">הצטרף עכשיו</Link></p>
               ) : (
@@ -56,7 +59,6 @@ export default function Home({ lessons }) {
             </div>
           );
         })}
-
         {lessons.length === 0 && <p>עדיין אין שיעורים להצגה. הוסף שורות בטבלת lessons.</p>}
       </div>
     </div>
