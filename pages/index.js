@@ -36,6 +36,7 @@ export default function Home() {
       <nav className="navbar">
         <div>
           <Link href="/">בית</Link>
+          <Link href="/prayers">תפילות</Link>
           <Link href="/premium">פרימיום</Link>
         </div>
         <div>
@@ -43,14 +44,25 @@ export default function Home() {
         </div>
       </nav>
 
+      <div className="hero">
+        <h1>תורה AI</h1>
+        <p>שיעורי תורה, תפילות וסגולות - יחד עם תובנות ייחודיות בעזרת בינה מלאכותית</p>
+        <div className="gold-line" />
+        <div className="rabbis-strip">
+          <span className="rabbi-chip">הרב יצחק פישחדזי שליט"א</span>
+          <span className="rabbi-chip">הרב עזרא שקלים שליט"א</span>
+          <span className="rabbi-chip">הרב אור החיים כהן שליט"א</span>
+          <span className="rabbi-chip">הרב בניהו שמואלי שליט"א</span>
+        </div>
+      </div>
+
       <div className="container">
-        <h1>תורה AI - שיעורים ותוכן תורני</h1>
         {lessons.map((lesson) => {
           const locked = lesson.is_premium && !isSubscriber;
           return (
             <div className="card" key={lesson.id}>
               <h3>{lesson.title} {lesson.is_premium && <span className="badge-premium">פרימיום</span>}</h3>
-              <p style={{ color: '#666' }}>מאת: {lesson.rabbis?.name}</p>
+              <p style={{ color: '#9FB0C7' }}>מאת: {lesson.rabbis?.name}</p>
               {locked ? (
                 <p>🔒 תוכן זה זמין למנויים בלבד. <Link href="/premium">הצטרף עכשיו</Link></p>
               ) : (
@@ -59,7 +71,12 @@ export default function Home() {
             </div>
           );
         })}
-        {lessons.length === 0 && <p>עדיין אין שיעורים להצגה. הוסף שורות בטבלת lessons.</p>}
+
+        {lessons.length === 0 && (
+          <div className="card" style={{ textAlign: 'center' }}>
+            <p>השיעורים הראשונים בדרך - בקרוב יעלו כאן תכנים חדשים מהרבנים.</p>
+          </div>
+        )}
       </div>
     </div>
   );
