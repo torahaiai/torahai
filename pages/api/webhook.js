@@ -1,7 +1,12 @@
 import Stripe from 'stripe';
-import pool from '../../lib/db';
+import { createClient } from '@supabase/supabase-js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 export const config = { api: { bodyParser: false } };
 
@@ -19,19 +24,18 @@ export default async function handler(req, res) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const userId = session.metadata.userId;
-
-    await pool.query(
-      `update users set subscription_status = 'active', stripe_customer_id = $1, is_subscriber = true where id = $2`,
-      [session.customer, userId]
-    );
+    await supabaseAdmin
+      .from('profiles')
+      .update({ subscription_status: 'active', stripe_customer_id: session.customer, is_subscriber: true })
+      .eq('id', userId);
   }
 
   if (event.type === 'customer.subscription.deleted') {
     const subscription = event.data.object;
-    await pool.query(
-      `update users set subscription_status = 'inactive', is_subscriber = false where stripe_customer_id = $1`,
-      [subscription.customer]
-    );
+    await supabaseAdmin
+      .from('profiles')
+      .update({ subscription_status: 'inactive', is_subscriber: false })
+      .eq('stripe_customer_id', subscription.customer);
   }
 
   res.status(200).json({ received: true });
