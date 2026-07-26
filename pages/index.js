@@ -36,6 +36,7 @@ export default function Home() {
       <nav className="navbar">
         <div>
           <Link href="/">בית</Link>
+          <Link href="/rabbis">רבנים</Link>
           <Link href="/prayers">תפילות</Link>
           <Link href="/premium">פרימיום</Link>
         </div>
@@ -48,12 +49,14 @@ export default function Home() {
         <h1>תורה AI</h1>
         <p>שיעורי תורה, תפילות וסגולות - יחד עם תובנות ייחודיות בעזרת בינה מלאכותית</p>
         <div className="gold-line" />
-        <div className="rabbis-strip">
-          <span className="rabbi-chip">הרב יצחק פישחדזי שליט"א</span>
-          <span className="rabbi-chip">הרב עזרא שקלים שליט"א</span>
-          <span className="rabbi-chip">הרב אור החיים כהן שליט"א</span>
-          <span className="rabbi-chip">הרב בניהו שמואלי שליט"א</span>
-        </div>
+        <Link href="/rabbis">
+          <div className="rabbis-strip">
+            <span className="rabbi-chip">הרב יצחק פישחדזי שליט"א</span>
+            <span className="rabbi-chip">הרב עזרא שקלים שליט"א</span>
+            <span className="rabbi-chip">הרב אור החיים כהן שליט"א</span>
+            <span className="rabbi-chip">הרב בניהו שמואלי שליט"א</span>
+          </div>
+        </Link>
       </div>
 
       <div className="container">
