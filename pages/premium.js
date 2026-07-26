@@ -1,16 +1,19 @@
 import { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Premium() {
-  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
   const handleSubscribe = async () => {
+    setLoading(true);
+    const { data: { session } } = await supabase.auth.getSession();
+
     if (!session) {
-      signIn();
+      alert('יש להתחבר קודם כדי להירשם למנוי');
+      window.location.href = '/login';
       return;
     }
-    setLoading(true);
+
     const res = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
