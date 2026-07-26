@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
   const [mode, setMode] = useState('login');
   const [error, setError] = useState('');
   const router = useRouter();
@@ -15,21 +14,12 @@ export default function Login() {
     setError('');
 
     if (mode === 'signup') {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, fullName }),
-      });
-      const data = await res.json();
-      if (!res.ok) return setError(data.error);
-
-      // הרשמה הצליחה - מתחברים אוטומטית
-      const result = await signIn('credentials', { redirect: false, email, password });
-      if (result.error) return setError(result.error);
-      router.push('/');
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) return setError(error.message);
+      alert('נרשמת בהצלחה! בדוק את המייל לאימות.');
     } else {
-      const result = await signIn('credentials', { redirect: false, email, password });
-      if (result.error) return setError('אימייל או סיסמה שגויים');
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return setError(error.message);
       router.push('/');
     }
   };
@@ -38,28 +28,8 @@ export default function Login() {
     <div className="container" style={{ maxWidth: 400 }}>
       <h2>{mode === 'login' ? 'התחברות' : 'הרשמה'}</h2>
       <form onSubmit={handleSubmit}>
-        {mode === 'signup' && (
-          <input
-            type="text"
-            placeholder="שם מלא"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-          />
-        )}
-        <input
-          type="email"
-          placeholder="אימייל"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="סיסמה"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="email" placeholder="אימייל" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="סיסמה" value={password} onChange={(e) => setPassword(e.target.value)} required />
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">{mode === 'login' ? 'התחבר' : 'הירשם'}</button>
       </form>
