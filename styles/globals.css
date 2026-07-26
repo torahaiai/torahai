@@ -181,6 +181,64 @@ input::placeholder { color: #8B99AD; }
   font-style: italic;
 }
 
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  color: var(--gold-light);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 50%;
+  transform: translateX(50%);
+  background: var(--navy-card);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 8px 0;
+  min-width: 200px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-dropdown-menu a,
+.nav-dropdown-static {
+  display: block;
+  padding: 10px 18px;
+  color: var(--white);
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.nav-dropdown-menu a:hover {
+  background: var(--navy-light);
+  color: var(--gold-light);
+}
+
+.nav-dropdown-static {
+  color: #8B99AD;
+  cursor: default;
+}
+
 /* מובייל */
 @media (max-width: 600px) {
   .navbar { padding: 12px 16px; justify-content: center; text-align: center; }
