@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Navbar from '../components/Navbar';
 import { supabase } from '../lib/supabaseClient';
 
 export default function Home() {
@@ -33,30 +34,16 @@ export default function Home() {
 
   return (
     <div>
-      <nav className="navbar">
-        <div>
-          <Link href="/">בית</Link>
-          <Link href="/rabbis">רבנים</Link>
-          <Link href="/prayers">תפילות</Link>
-          <Link href="/premium">פרימיום</Link>
-        </div>
-        <div>
-          {user ? <span>שלום, {user.email}</span> : <Link href="/login" className="btn">התחברות</Link>}
-        </div>
-      </nav>
+      <Navbar
+        rightContent={
+          user ? <span>שלום, {user.email}</span> : <Link href="/login" className="btn">התחברות</Link>
+        }
+      />
 
       <div className="hero">
         <h1>תורה AI</h1>
         <p>שיעורי תורה, תפילות וסגולות - יחד עם תובנות ייחודיות בעזרת בינה מלאכותית</p>
         <div className="gold-line" />
-        <Link href="/rabbis">
-          <div className="rabbis-strip">
-            <span className="rabbi-chip">הרב יצחק פישחדזי שליט"א</span>
-            <span className="rabbi-chip">הרב עזרא שקלים שליט"א</span>
-            <span className="rabbi-chip">הרב אור החיים כהן שליט"א</span>
-            <span className="rabbi-chip">הרב בניהו שמואלי שליט"א</span>
-          </div>
-        </Link>
       </div>
 
       <div className="container">
