@@ -114,7 +114,7 @@ a { text-decoration: none; color: inherit; }
 
 button, .btn {
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: #1a1a1a;
+  color: var(--white);
   border: none;
   padding: 11px 22px;
   border-radius: 8px;
@@ -122,6 +122,7 @@ button, .btn {
   font-size: 15px;
   font-weight: 700;
   transition: opacity 0.2s;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
 
 button:hover, .btn:hover { opacity: 0.9; }
@@ -140,6 +141,20 @@ input {
 }
 
 input::placeholder { color: #8B99AD; }
+
+.prayer-text {
+  line-height: 2;
+  font-size: 17px;
+  color: var(--white);
+  white-space: pre-line;
+}
+
+.section-title {
+  color: var(--gold);
+  font-size: 24px;
+  margin: 36px 0 16px;
+  text-align: center;
+}
 
 /* מובייל */
 @media (max-width: 600px) {
