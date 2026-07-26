@@ -1,10 +1,20 @@
+:root {
+  --navy: #0B1F3A;
+  --navy-light: #142E52;
+  --navy-card: #10284A;
+  --gold: #D4AF37;
+  --gold-light: #E8C766;
+  --white: #F7F8FA;
+}
+
 html, body {
   direction: rtl;
   font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #FAF7F0;
+  background: var(--navy);
   margin: 0;
   padding: 0;
-  color: #2E2B26;
+  color: var(--white);
+  min-height: 100vh;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -12,7 +22,7 @@ a { text-decoration: none; color: inherit; }
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 24px 16px 60px;
 }
 
 .navbar {
@@ -20,44 +30,122 @@ a { text-decoration: none; color: inherit; }
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background: #1F3B2C;
-  color: #fff;
+  background: var(--navy-light);
+  border-bottom: 2px solid var(--gold);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.navbar a { color: #fff; margin-right: 16px; font-weight: 600; }
+.navbar a {
+  color: var(--gold-light);
+  margin-inline-end: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.hero {
+  text-align: center;
+  padding: 50px 16px 30px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 6vw, 44px);
+  color: var(--gold);
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.hero p {
+  color: #C9D3E0;
+  font-size: clamp(15px, 3vw, 18px);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.gold-line {
+  width: 80px;
+  height: 2px;
+  background: var(--gold);
+  margin: 18px auto 0;
+}
+
+.rabbis-strip {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 30px 0 10px;
+}
+
+.rabbi-chip {
+  background: var(--navy-card);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  white-space: nowrap;
+}
 
 .card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
+  background: var(--navy-card);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 14px;
+  padding: 18px 20px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+
+.card h3, .card h4 {
+  margin-top: 0;
+  color: var(--white);
 }
 
 .badge-premium {
-  background: #C99A3B;
-  color: #fff;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: #1a1a1a;
   font-size: 12px;
-  padding: 3px 10px;
+  font-weight: 700;
+  padding: 3px 12px;
   border-radius: 20px;
+  margin-inline-start: 8px;
 }
 
 button, .btn {
-  background: #1F3B2C;
-  color: #fff;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: #1a1a1a;
   border: none;
-  padding: 10px 20px;
+  padding: 11px 22px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 15px;
+  font-weight: 700;
+  transition: opacity 0.2s;
 }
+
+button:hover, .btn:hover { opacity: 0.9; }
 
 input {
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: var(--navy-light);
+  color: var(--white);
   box-sizing: border-box;
+  font-size: 15px;
+}
+
+input::placeholder { color: #8B99AD; }
+
+/* מובייל */
+@media (max-width: 600px) {
+  .navbar { padding: 12px 16px; justify-content: center; text-align: center; }
+  .navbar > div { display: flex; justify-content: center; width: 100%; }
+  .container { padding: 16px 12px 40px; }
+  .hero { padding: 30px 10px 20px; }
+  .card { padding: 14px 16px; }
 }
